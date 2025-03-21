@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .stopwatch {
+            font-size: 2em;
+            margin: 20px;
+        }
+        button {
+            font-size: 1em;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        #laps {
+            list-style: none;
+            padding: 0;
+        }
+        #laps li {
+            font-size: 1.2em;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stopwatch</h1>
+    <div class="stopwatch" id="display">00:00:00</div>
+    <button onclick="start()">Start</button>
+    <button onclick="pause()">Pause</button>
+    <button onclick="reset()">Reset</button>
+    <button onclick="lap()">Lap</button>
+    <ul id="laps"></ul>
+
+    <script>
+        let timer;
+        let running = false;
+        let startTime;
+        let elapsedTime = 0;
+
+        function updateDisplay() {
+            let time = Date.now() - startTime + elapsedTime;
+            let seconds = Math.floor((time / 1000) % 60);
+            let minutes = Math.floor((time / 60000) % 60);
+            let hours = Math.floor(time / 3600000);
+            document.getElementById('display').innerText = 
+                (hours < 10 ? "0" : "") + hours + ":" +
+                (minutes < 10 ? "0" : "") + minutes + ":" +
+                (seconds < 10 ? "0" : "") + seconds;
+        }
+
+        function start() {
+            if (!running) {
+                running = true;
+                startTime = Date.now();
+                timer = setInterval(updateDisplay, 1000);
+            }
+        }
+
+        function pause() {
+            if (running) {
+                running = false;
+                elapsedTime += Date.now() - startTime;
+                clearInterval(timer);
+            }
+        }
+
+        function reset() {
+            running = false;
+            clearInterval(timer);
+            elapsedTime = 0;
+            document.getElementById('display').innerText = "00:00:00";
+            document.getElementById('laps').innerHTML = "";
+        }
+
+        function lap() {
+            if (running) {
+                let lapTime = document.getElementById('display').innerText;
+                let lapItem = document.createElement('li');
+                lapItem.innerText = lapTime;
+                document.getElementById('laps').appendChild(lapItem);
+            }
+        }
+    </script>
+</body>
+</html>

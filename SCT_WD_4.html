@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+        }
+        input, button {
+            margin: 5px;
+            padding: 10px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            display: flex;
+            justify-content: space-between;
+            background: #f4f4f4;
+            padding: 10px;
+            margin: 5px 0;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <input type="text" id="taskInput" placeholder="Add a task...">
+        <input type="datetime-local" id="taskDate">
+        <button onclick="addTask()">Add Task</button>
+        <ul id="taskList"></ul>
+    </div>
+
+    <script>
+        function addTask() {
+            const taskInput = document.getElementById("taskInput");
+            const taskDate = document.getElementById("taskDate");
+            const taskList = document.getElementById("taskList");
+            
+            if (taskInput.value.trim() === "") return;
+            
+            const li = document.createElement("li");
+            li.innerHTML = `
+                <span>${taskInput.value} (${taskDate.value})</span>
+                <button onclick="markComplete(this)">✔</button>
+                <button onclick="deleteTask(this)">❌</button>
+            `;
+            
+            taskList.appendChild(li);
+            taskInput.value = "";
+            taskDate.value = "";
+        }
+        
+        function markComplete(button) {
+            button.parentElement.firstChild.classList.toggle("completed");
+        }
+        
+        function deleteTask(button) {
+            button.parentElement.remove();
+        }
+    </script>
+</body>
+</html>
